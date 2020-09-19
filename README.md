@@ -1,2 +1,2 @@
 # speech-processing
-An old project that I developed for the Speech Processing course in University of Piraeus, Department of Informatics.
+An old project that I developed for the Speech Processing course in University of Piraeus, Department of Informatics. The repository actually consists of two seperate projects. The 10_5 file is a Bayesian classifier that assigns speech data to two classes (voice or unvoiced). The 10_7 file is a pitch estimation algorithm. Training data and relevant files originate from Theory and Applications of Digital Speech Processing, L.Rabiner & R.W.Schafer.
