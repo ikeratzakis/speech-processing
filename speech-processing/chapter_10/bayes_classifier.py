@@ -23,8 +23,6 @@ mean2 = [np.mean(loges), np.mean(zcs)]
 std2 = [np.std(loges), np.mean(zcs)]
 
 
-# print(oneA,sampleRate)
-
 # Function to calculate the shortTimeEnergy for given windowLength and step.
 # This is a direct python implementation from the file found in the gunet e-class.
 def short_time_energy(signal, window_length, step):
@@ -76,7 +74,7 @@ def calculate_distance(energy, zcr):
     for energy, zcr in zip(energy, zcr):
         d1 = ((energy - mean1[0]) ** 2 / (std1[0] ** 2)) + (zcr - mean1[1]) ** 2 / (std1[1] ** 2)
         d2 = ((energy - mean2[0]) ** 2 / (std2[0] ** 2)) + (zcr - mean2[1]) ** 2 / (std2[1] ** 2)
-        # After calculating the said distances,append them to the respective list.
+
         distance1.append(d1)
         distance2.append(d2)
     return distance1, distance2
@@ -89,9 +87,9 @@ def assign_classes(distance1, distance2):
     target_vector = []
     for d1, d2 in zip(distance1, distance2):
         if d1 < d2:
-            target_vector.append('1')
+            target_vector.append(1)
         else:
-            target_vector.append('2')
+            target_vector.append(2)
     return target_vector
 
 
@@ -100,7 +98,7 @@ def assign_classes(distance1, distance2):
 def evaluate_classifier(distance1, distance2):
     trust_vector = []
     for d1, d2 in zip(distance1, distance2):
-        trust = (max(d1, d2)) / (d1 + d2)
+        trust = max(d1, d2) / (d1 + d2)
         trust_vector.append(trust)
     return trust_vector
 
@@ -128,7 +126,7 @@ def calculate_steplength(sample_rate):
     return step_length
 
 
-# Usage: python/python3 speechProcessing10_5.py 'file name' threshold.
+# Usage: python3 bayes_classifier.py 'file name' threshold.
 
 
 def main():
@@ -152,9 +150,7 @@ def main():
     zcr = zerocrossing_rate(input_signal, window_length=800, step=step_length)
     norm_zcr = [100 * x - 5 for x in zcr]
     # Calculate distances and unpack to 2 lists
-    distances = calculate_distance(norm_energy, norm_zcr)
-    distance1 = distances[0]
-    distance2 = distances[1]
+    distance1, distance2 = calculate_distance(norm_energy, norm_zcr)
     # Call minimum distance classifier to assign classes according to the 2 distance lists
     classification = assign_classes(distance1=distance1, distance2=distance2)
     # Calculate the classifier trust according to the 2 distance lists
@@ -169,7 +165,6 @@ def main():
     plt.subplot(311)
     plt.plot(np.array(classification), label='Class assigned(1 is NS,2 is S)')
     plt.plot(np.array(classifier_trust), label='Classification trust')
-    # plt.legend(loc='upper left')
     plt.legend(bbox_to_anchor=(0., 1.6, 1., .102), loc=2,
                ncol=2, mode="expand", borderaxespad=0.)
 
